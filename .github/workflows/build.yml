@@ -18,7 +18,7 @@ jobs:
 
     - name: Build Solution in Release Mode
       # Replace 'YourSolutionName.sln' with the exact name of your project's .sln file!
-      run: msbuild YourSolutionName.sln /p:Configuration=Release /p:Platform=x64
+      run: msbuild coclassic.sln /p:Configuration=Release /p:Platform=x64
 
     - name: Upload Compiled Binaries
       uses: actions/upload-artifact@v4
