@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="Gray_spdlog_init">
+  <PropertyGroup Label="Default initializers for properties">
+    <Linkage-Gray_spdlog Condition="'$(Linkage-Gray_spdlog)' == ''">dynamic</Linkage-Gray_spdlog>
+    <CallingConvention-Gray_spdlog Condition="'$(CallingConvention-Gray_spdlog)' == ''">cdecl</CallingConvention-Gray_spdlog>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)../../build/native/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)../../build/native/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)\default-propertiesui.xml" />
+  </ItemGroup>
+  <UsingTask TaskName="Gray_spdlog_Contains" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" TaskFactory="CodeTaskFactory">
+    <ParameterGroup>
+      <Text Output="false" ParameterType="System.String" />
+      <Library Output="false" Required="true" ParameterType="System.String" />
+      <Value Output="false" Required="true" ParameterType="System.String" />
+      <Result Output="true" ParameterType="System.String" />
+    </ParameterGroup>
+    <Task>
+      <Code>Result = ((Text ?? "").Split(';').Contains(Library) ) ? Value : String.Empty;</Code>
+    </Task>
+  </UsingTask>
+  <Target Name="Gray_spdlog_init">
+    <Gray_spdlog_Contains Text="Linkage-dynamic" Library="Gray_spdlog" Value="dynamic" Condition="'$(Linkage-Gray_spdlog)'==''">
+      <Output TaskParameter="Result" PropertyName="Linkage-Gray_spdlog" />
+    </Gray_spdlog_Contains>
+    <Gray_spdlog_Contains Text="Linkage-static" Library="Gray_spdlog" Value="static" Condition="'$(Linkage-Gray_spdlog)'==''">
+      <Output TaskParameter="Result" PropertyName="Linkage-Gray_spdlog" />
+    </Gray_spdlog_Contains>
+    <Gray_spdlog_Contains Text="Linkage-ltcg" Library="Gray_spdlog" Value="ltcg" Condition="'$(Linkage-Gray_spdlog)'==''">
+      <Output TaskParameter="Result" PropertyName="Linkage-Gray_spdlog" />
+    </Gray_spdlog_Contains>
+    <Gray_spdlog_Contains Text="Linkage-sxs" Library="Gray_spdlog" Value="sxs" Condition="'$(Linkage-Gray_spdlog)'==''">
+      <Output TaskParameter="Result" PropertyName="Linkage-Gray_spdlog" />
+    </Gray_spdlog_Contains>
+    <Gray_spdlog_Contains Text="CallingConvention-cdecl" Library="Gray_spdlog" Value="cdecl" Condition="'$(CallingConvention-Gray_spdlog)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-Gray_spdlog" />
+    </Gray_spdlog_Contains>
+    <Gray_spdlog_Contains Text="CallingConvention-stdcall" Library="Gray_spdlog" Value="stdcall" Condition="'$(CallingConvention-Gray_spdlog)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-Gray_spdlog" />
+    </Gray_spdlog_Contains>
+    <Gray_spdlog_Contains Text="CallingConvention-fastcall" Library="Gray_spdlog" Value="fastcall" Condition="'$(CallingConvention-Gray_spdlog)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-Gray_spdlog" />
+    </Gray_spdlog_Contains>
+    <Gray_spdlog_Contains Text="CallingConvention-thiscall" Library="Gray_spdlog" Value="thiscall" Condition="'$(CallingConvention-Gray_spdlog)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-Gray_spdlog" />
+    </Gray_spdlog_Contains>
+    <Gray_spdlog_Contains Text="CallingConvention-clrcall" Library="Gray_spdlog" Value="clrcall" Condition="'$(CallingConvention-Gray_spdlog)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-Gray_spdlog" />
+    </Gray_spdlog_Contains>
+  </Target>
+</Project>
