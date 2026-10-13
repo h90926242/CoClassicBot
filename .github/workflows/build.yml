@@ -1,13 +1,18 @@
-name: Build C++ Release App
+name: Build and Release C++ App
 
 on:
   push:
-    branches: [ "main" ] # Triggers the build every time you push to the 'main' branch
-  workflow_dispatch:     # Adds a button so you can trigger the build manually at any time
+    tags:
+      - 'v*'            # Triggers automatically when you push a version tag like v1.0.0
+  workflow_dispatch:     # Allows you to click the manual "Run workflow" button anytime
 
 jobs:
   build:
-    runs-on: windows-2022 # Boots a clean cloud machine running Windows Server 2022 + VS 2022
+    runs-on: windows-2022
+
+    # Grants explicit authorization to create releases and upload files
+    permissions:
+      contents: write
 
     steps:
     - name: Checkout Code
@@ -17,13 +22,17 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     - name: Build Solution in Release Mode
-      # Replace 'YourSolutionName.sln' with the exact name of your project's .sln file!
       run: msbuild coclassic.sln /p:Configuration=Release /p:Platform=x64
 
-    - name: Upload Compiled Binaries
-      uses: actions/upload-artifact@v4
+    - name: Create GitHub Release and Upload Binaries
+      uses: softprops/action-gh-release@v2
       with:
-        name: Compiled-App-Files
-        path: |
+        tag_name: ${{ github.ref_name || 'v1.0.0-manual' }}
+        name: Release ${{ github.ref_name || 'v1.0.0-manual' }}
+        draft: false
+        prerelease: false
+        files: |
           **/Release/*.exe
           **/Release/*.dll
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
