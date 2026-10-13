@@ -1,0 +1,29 @@
+name: Build C++ Release App
+
+on:
+  push:
+    branches: [ "main" ] # Triggers the build every time you push to the 'main' branch
+  workflow_dispatch:     # Adds a button so you can trigger the build manually at any time
+
+jobs:
+  build:
+    runs-on: windows-2022 # Boots a clean cloud machine running Windows Server 2022 + VS 2022
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build Solution in Release Mode
+      # Replace 'YourSolutionName.sln' with the exact name of your project's .sln file!
+      run: msbuild YourSolutionName.sln /p:Configuration=Release /p:Platform=x64
+
+    - name: Upload Compiled Binaries
+      uses: actions/upload-artifact@v4
+      with:
+        name: Compiled-App-Files
+        path: |
+          **/Release/*.exe
+          **/Release/*.dll
